@@ -15,13 +15,14 @@ class ScrumPlugin extends MantisPlugin
 
 	public function register()
 	{
+		//echo __CLASS__; die();
 		$this->name = plugin_lang_get("title");
 		$this->description = plugin_lang_get("description");
 		$this->page = 'config_page';
 
-		$this->version = "0.3";
+		$this->version = "0.4";
 		$this->requires = array(
-			"MantisCore" => "1.2.6",
+			"MantisCore" => "<2.9.9",
 		);
 		$this->uses = array(
 			"Source" => "0.16",
@@ -32,10 +33,13 @@ class ScrumPlugin extends MantisPlugin
 		$this->url = "https://github.com/mantisbt-plugins/scrum";
 	}
 
+    /**
+     *
+     */
 	public function config()
 	{
 		return array(
-			#$g_status_enum_string = '10:new,20:feedback,30:acknowledged,40:confirmed,50:assigned,80:resolved,90:closed';
+		    #$g_status_enum_string = '10:new,20:feedback,30:acknowledged,40:confirmed,50:assigned,80:resolved,90:closed';
 			"board_columns" => array(
 				"new" => array(10, 20, 30),
 				"confirmed" => array(40, 50),
@@ -70,16 +74,54 @@ class ScrumPlugin extends MantisPlugin
 			"token_expiry" => 30 * ScrumPlugin::DURATION_DAY,
 			"sprint_length" => 14 * ScrumPlugin::DURATION_DAY,
 			"show_empty_status" => OFF,
+			"access_threshold" => DEVELOPER,
 		);
 	}
 
 	public function hooks()
 	{
+	    /*
 		return array(
 			"EVENT_MENU_MAIN" => "menu",
 		);
+        */
+     
+		$t_hooks = array(
+			'EVENT_MENU_MAIN' => 'show_on_main_menu'
+		);
+		return $t_hooks;
 	}
 
+   # Add start menu item
+	function show_on_main_menu() {
+        if ( access_has_global_level( plugin_config_get( 'access_threshold' ) ) ) {
+            return array(
+                array('title' => lang_get( 'plugin_Scrum_title' ),
+                      'access_level' => plugin_config_get( 'access_threshold' ),
+                      'url'           => 'plugin.php?page=Scrum/board',
+                      'icon'          => 'fa-stethoscope'
+                ),
+            );
+		}
+	}
+
+	/**
+	 * @return array
+	 */
+	function menu() {
+		echo __FUNCTION__; die();
+		if( access_has_project_level( config_get( 'view_summary_threshold' ) ) ) {
+			return array( '<a class="btn btn-sm btn-primary btn-white btn-round" href="' .
+				plugin_page( 'board.php' ) . '">' . 
+				plugin_lang_get( 'board' ) . '</a>', );
+		} else {
+			return '';
+		}
+	}
+
+
+
+    /* ORIGINAL
 	public function menu($event)
 	{
 		$links = array();
@@ -87,4 +129,5 @@ class ScrumPlugin extends MantisPlugin
 
 		return $links;
 	}
+	*/
 }

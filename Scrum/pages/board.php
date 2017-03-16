@@ -3,7 +3,10 @@
 # Copyright (c) 2011 John Reese
 # Licensed under the MIT license
 
-require_once( 'icon_api.php' );
+$px = dirname( __FILE__ );
+$zx = explode('plugins',$px);
+$rp = $zx[0] . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR;
+require_once( $rp . 'icon_api.php' );
 
 $current_project = helper_get_current_project();
 $project_ids = current_user_get_all_accessible_subprojects( $current_project );
@@ -13,6 +16,8 @@ $resolved_threshold = config_get( 'bug_resolved_status_threshold' );
 
 $bug_table = db_get_table( 'mantis_bug_table' );
 $version_table = db_get_table( 'mantis_project_version_table' );
+$category_table = db_get_table( 'mantis_category_table' );
+
 
 # Fetch list of target versions in use for the given projects
 $query = "SELECT DISTINCT v.date_order, v.version, b.target_version
@@ -30,8 +35,18 @@ while( $row = db_fetch_array( $result ) ) {
 	}
 }
 
+# TESISQUARE
+if( count($versions) == 0 )
+{
+	echo 'No Issue Found with Version => Abort';
+	die();
+}	
+
+//echo __LINE__ . '<br>';
+
 # Get the selected target version
 $versions_by_project = array();
+$target_version = null;  #TESISQUARE
 $token_versions_by_project = token_get_value( ScrumPlugin::TOKEN_SCRUM_VERSION );
 if( !is_null( $token_versions_by_project ) ) {
 	$versions_by_project = unserialize( $token_versions_by_project );
@@ -45,6 +60,7 @@ if( gpc_isset( 'version' ) ) {
 	}
 }
 
+//echo __LINE__ . '<br>';
 if( !in_array( $target_version, $versions ) ) {
 	$target_version = '';
 }
@@ -55,6 +71,8 @@ $t_res = token_set(
 	serialize( $versions_by_project ),
 	plugin_config_get( 'token_expiry' )
 );
+
+//echo __LINE__ . '<br>';
 
 # Fetch list of categories in use for the given projects
 $params = array();
@@ -68,6 +86,15 @@ if( $target_version ) {
 }
 
 $result = db_query_bound( $query, $params );
+$nr = db_num_rows($result);
+
+# TESISQUARE
+if( $nr == 0 )
+{
+	echo 'No Categories Available => Abort';
+	die();
+}	
+//echo __LINE__ . '<br>';
 $categories = array();
 $category_ids = array();
 $category_name = null;
@@ -103,6 +130,8 @@ if( isset( $categories[$category] ) ) {
 	$category_ids = $categories[$category];
 }
 
+//echo __LINE__ . '<br>';
+
 $columns = plugin_config_get( 'board_columns' );
 $sevcolors = plugin_config_get( 'board_severity_colors' );
 $rescolors = plugin_config_get( 'board_resolution_colors' );
@@ -120,6 +149,8 @@ token_set(
 	serialize( $categories_by_project),
 	plugin_config_get( 'token_expiry' )
 );
+
+//echo __LINE__ . '<br>';
 
 # Retrieve all bugs with the matching target version
 $params = array();
@@ -161,6 +192,8 @@ foreach( $bug_ids as $bug_id ) {
 		$resolved_count++;
 	}
 }
+
+//echo __LINE__ . '<br>';
 
 $bug_count = count( $bug_ids );
 if( $bug_count > 0 ) {
@@ -217,7 +250,8 @@ if( $target_version ) {
 	}
 }
 
-html_page_top( plugin_lang_get( 'board' ) );
+//echo __LINE__ . '<br>';
+layout_page_header( plugin_lang_get( 'board' ) );
 ?>
 
 <link rel="stylesheet" type="text/css" href="<?php echo plugin_file( 'scrumboard.css' ) ?>"/>
@@ -381,4 +415,4 @@ html_page_top( plugin_lang_get( 'board' ) );
 </table>
 
 <?php
-html_page_bottom();
+layout_page_end();

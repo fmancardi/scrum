@@ -6,9 +6,8 @@
 auth_reauthenticate();
 access_ensure_global_level( config_get( 'manage_plugin_threshold' ) );
 
-html_page_top( plugin_lang_get( 'config_title' ) );
-
-print_manage_menu();
+layout_page_header( plugin_lang_get( 'config_title' ) );
+layout_page_header();
 ?>
 
 <br>
@@ -154,4 +153,4 @@ print_manage_menu();
 </form>
 
 <?php
-html_page_bottom();
+layout_page_end();

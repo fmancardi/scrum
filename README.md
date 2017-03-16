@@ -10,6 +10,10 @@ See the [Changelog](https://github.com/mantisbt-plugins/scrum/blob/config/CHANGE
 
 ## Description
 
+@fmancardi
+master => original fork
+mantisbt-2.x => effort to make this compatible with mantisbt 2.x
+
 Adds a Scrum board based on Status, Category, and Target Version
 to MantisBT.
 
