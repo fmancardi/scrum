@@ -23,10 +23,12 @@ div.scrumbar span.bar {
 	background: #d2f5b0;
 }
 
+/* fman 20171009
 td.scrumcolumn {
 	padding: 4px;
 	vertical-align: top;
 }
+*/
 
 td.scrumcolumn hr {
 	clear: both;
@@ -100,4 +102,15 @@ div.scrumblock p.resolution {
 div.scrumblock p.handler {
 	padding-top: 3px;
 }
+
+/* Classi che sono sparite in mantis 2.x */
+/* Custom class for scrum */
+tr.spacer     { background-color: #ffffff; color: #000000; height: 5px; }
+tr.row-1      { background-color: #d8d8d8; color: #000000; }
+tr.row-2      { background-color: #e8e8e8; color: #000000; }
+tr.row-category   { background-color: #c8c8e8; color: #000000; font-weight: bold;}
+tr.row-category2  { background-color: #c8c8e8; color: #000000; }
+tr.row-category td  { text-align:center; border: 1px solid black;}
+td.scrumcolumn {padding: 4px; vertical-align: top; border: 1px solid black; }
+
 
