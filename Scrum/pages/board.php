@@ -248,6 +248,7 @@ if( $target_version ) {
 }
 
 layout_page_header( plugin_lang_get( 'board' ) );
+layout_page_begin();
 ?>
 
 <link rel="stylesheet" type="text/css" href="<?php echo plugin_file( 'scrumboard.css' ) ?>"/>
