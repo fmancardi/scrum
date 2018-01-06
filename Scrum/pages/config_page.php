@@ -7,7 +7,7 @@ auth_reauthenticate();
 access_ensure_global_level( config_get( 'manage_plugin_threshold' ) );
 
 layout_page_header( plugin_lang_get( 'config_title' ) );
-layout_page_header();
+layout_page_begin();
 ?>
 
 <br>
