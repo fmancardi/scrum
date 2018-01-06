@@ -10,10 +10,6 @@ See the [Changelog](https://github.com/mantisbt-plugins/scrum/blob/config/CHANGE
 
 ## Description
 
-@fmancardi
-master => original fork
-mantisbt-2.x => effort to make this compatible with mantisbt 2.x
-
 Adds a Scrum board based on Status, Category, and Target Version
 to MantisBT.
 
@@ -25,6 +21,15 @@ The plugin requires [MantisBT](http://www.mantisbt.org/) version 1.2.6 or higher
 If the [Source Integration plugin](https://github.com/mantisbt-plugins/source-integration)
 (version 0.16 or higher) is installed, the cards will display the number of
 changesets attached to each issue.
+
+Depending on which version of MantisBT you are using, please make sure to
+get the appropriate version of the source code.
+Use the relevant branch in the FORKED Plugin's GitHub repository (fmancardi), as per the table below:
+
+MantisBT version | Branch | Notes
+:---:|---|---
+2.x   | [master.2.x]| 
+1.2.x | [master]| Legacy (no longer supported)
 
 
 ## Installation
