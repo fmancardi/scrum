@@ -26,7 +26,7 @@ $query = "SELECT DISTINCT v.date_order, v.version, b.target_version
 	WHERE v.project_id IN (".join(", ", $project_ids). ")
 	ORDER BY v.date_order DESC";
 
-$result = db_query_bound( $query );
+$result = db_query( $query );
 
 $versions = array();
 while( $row = db_fetch_array( $result ) ) {
@@ -35,14 +35,12 @@ while( $row = db_fetch_array( $result ) ) {
 	}
 }
 
-# TESISQUARE
 if( count($versions) == 0 )
 {
-	echo 'No Issue Found with Version => Abort';
-	die();
+	echo plugin_lang_get('no_issues_with_v');
+	exit();
 }	
 
-//echo __LINE__ . '<br>';
 
 # Get the selected target version
 $versions_by_project = array();
@@ -60,7 +58,7 @@ if( gpc_isset( 'version' ) ) {
 	}
 }
 
-//echo __LINE__ . '<br>';
+
 if( !in_array( $target_version, $versions ) ) {
 	$target_version = '';
 }
@@ -72,7 +70,6 @@ $t_res = token_set(
 	plugin_config_get( 'token_expiry' )
 );
 
-//echo __LINE__ . '<br>';
 
 # Fetch list of categories in use for the given projects
 $params = array();
@@ -85,16 +82,18 @@ if( $target_version ) {
 	$params[] = $target_version;
 }
 
-$result = db_query_bound( $query, $params );
+
+$result = db_query( $query, $params );
 $nr = db_num_rows($result);
 
 # TESISQUARE
 if( $nr == 0 )
 {
-	echo 'No Categories Available => Abort';
-	die();
+	echo plugin_lang_get('no_cat_available');
+	exit();
 }	
-//echo __LINE__ . '<br>';
+
+
 $categories = array();
 $category_ids = array();
 $category_name = null;
@@ -110,6 +109,7 @@ while( $row = db_fetch_array( $result ) ) {
 	}
 }
 
+
 # Get the selected category
 $categories_by_project = array();
 $token_categories_by_project = token_get_value( ScrumPlugin::TOKEN_SCRUM_CATEGORY );
@@ -118,6 +118,7 @@ if( !is_null( $token_categories_by_project ) ) {
 	$categories_by_project = unserialize( $token_categories_by_project );
 }
 
+$category = '';
 if( gpc_isset( 'category' ) ) {
 	$category = gpc_get_string( 'category', '' );
 } else {
@@ -130,7 +131,6 @@ if( isset( $categories[$category] ) ) {
 	$category_ids = $categories[$category];
 }
 
-//echo __LINE__ . '<br>';
 
 $columns = plugin_config_get( 'board_columns' );
 $sevcolors = plugin_config_get( 'board_severity_colors' );
@@ -150,8 +150,6 @@ token_set(
 	plugin_config_get( 'token_expiry' )
 );
 
-//echo __LINE__ . '<br>';
-
 # Retrieve all bugs with the matching target version
 $params = array();
 $query = "SELECT id FROM {$bug_table}
@@ -167,7 +165,8 @@ if( $category_name ) {
 }
 
 $query .= ' ORDER BY status ASC, priority DESC, id DESC';
-$result = db_query_bound($query, $params);
+$result = db_query($query, $params);
+
 
 $bug_ids = array();
 while( $row = db_fetch_array( $result ) ) {
@@ -192,8 +191,6 @@ foreach( $bug_ids as $bug_id ) {
 		$resolved_count++;
 	}
 }
-
-//echo __LINE__ . '<br>';
 
 $bug_count = count( $bug_ids );
 if( $bug_count > 0 ) {
@@ -250,7 +247,6 @@ if( $target_version ) {
 	}
 }
 
-//echo __LINE__ . '<br>';
 layout_page_header( plugin_lang_get( 'board' ) );
 ?>
 
@@ -266,6 +262,7 @@ layout_page_header( plugin_lang_get( 'board' ) );
 			<form action="<?php echo plugin_page( 'board' ) ?>" method="get">
 				<input type="hidden" name="page" value="Scrum/board"/>
 
+
 				<select name="version">
 					<option value=""><?php echo plugin_lang_get( 'all' ) ?></option>
 					<?php foreach( $versions as $version ): ?>
@@ -280,12 +277,11 @@ layout_page_header( plugin_lang_get( 'board' ) );
 					<option value=""><?php echo plugin_lang_get( 'all' ) ?></option>
 					<?php foreach( array_keys( $categories ) as $category_name ): ?>
 					<option value="<?php echo $category_name ?>" <?php
-						check_selected( $category, $category_name ); ?>>
+						check_selected( $category, $category_name,false ); ?>>
 						<?php echo $category_name ?>
 					</option>
 					<?php endforeach ?>
 				</select>
-
 				<input type="submit" value="Go" />
 			</form>
 		</td>
