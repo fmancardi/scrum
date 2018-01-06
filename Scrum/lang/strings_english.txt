@@ -37,3 +37,7 @@ $s_plugin_Scrum_show_empty_status_info = 'If checked, the Status is displayed ev
 $s_plugin_Scrum_token_expiry_label = 'Token Expiry';
 $s_plugin_Scrum_token_expiry_info = 'Number of days to remember the filter criteria selection on the Scrum Board';
 $s_plugin_Scrum_action_update = 'Update';
+
+
+$s_plugin_Scrum_no_issues_with_v = 'No Issues Found with Version Assigned => No way to create Board -> Abort';
+$s_plugin_Scrum_no_cat_available = 'No Categories Available => No way to create Board -> Abort';
