@@ -15,14 +15,13 @@ class ScrumPlugin extends MantisPlugin
 
 	public function register()
 	{
-		//echo __CLASS__; die();
 		$this->name = plugin_lang_get("title");
 		$this->description = plugin_lang_get("description");
 		$this->page = 'config_page';
 
 		$this->version = "0.4";
 		$this->requires = array(
-			"MantisCore" => "<2.9.9",
+			"MantisCore" => "2.0",
 		);
 		$this->uses = array(
 			"Source" => "0.16",
